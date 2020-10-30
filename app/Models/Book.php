@@ -13,6 +13,11 @@ class Book extends Model
 
 public function isbn()
      {
-         return $this -> hasOnea('App\Models\Isbn');
+         return $this -> hasOne('App\Models\Isbn');
+     }
+
+public function loans()
+     {
+         return $this -> hasMany('App\Models\Loan');
      }
 }

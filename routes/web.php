@@ -9,4 +9,4 @@ Route::get('/', function () {
 
 Route::resource('books', 'BookController');
 Route::get('/books/{id}/delete', 'BookController@destroy');
-
+Route::resource('loans' , 'LoanController');

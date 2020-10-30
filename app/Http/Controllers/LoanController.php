@@ -1,23 +1,22 @@
 <?php
 
-namespace App\Http\Controllers; 
-use App\Models\Book;
-use App\Models\Isbn;
-
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Loan;
+use App\Models\Book;
 
-class BookController extends Controller
+class LoanController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Book $book)
+    public function index()
     {
-        $booksList = $book->all();
-        return view('books/list' , ['booksList' => $booksList]);
+        $loansList = Loan::all();
+        return view('loans/list', ['loansList' => $loansList]);
     }
 
     /**
@@ -25,18 +24,16 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
-            $book = new Book();
-        $book->name = "Ala z lala";
-        $book->year = 2000;
-        $book->publication_place = "Warszawa";
-        $book->pages = 200;
-        $book->price = 39.99;
-        $book->save();
-        
-        $isbn = new Isbn(['number' => '141412532', 'issued_by' => "Helion" , 'issued_on' => "2013-03-02"]);
-        $book -> isbn() -> save($isbn);
+        $alazlala = Book::where('name',"Ala z lala") -> first();
+
+        $loan = new Loan();
+        $loan-> client ="Tadek Jarek, Jaworowa 12, 12-345 Warszawa, 409 409 409";
+        $loan-> loaned_on = "2019-09-09";
+        $loan->estimated_on = "2019-09-21";
+        $loan->book_id=$alazlala->id;
+        $loan->save();
         return redirect('books');
     }
 
@@ -59,8 +56,7 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        $book = Book::find($id);
-        return view('books/show',['book' => $book]);
+        //
     }
 
     /**
@@ -71,16 +67,7 @@ class BookController extends Controller
      */
     public function edit($id)
     {
-        $book = Book::find($id);
-         $book->name = "Męczennik";
-         $book->year = 1986;
-         $book->publication_place = 'Łódź';
-         $book->pages = 450;
-         $book->price = 59.99;
-         $book->save();
-        
-         return redirect('books');
-    
+        //
     }
 
     /**
@@ -103,9 +90,6 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        $book = Book::find($id);
-        $book -> delete();
-        return redirect('books');
-
+        //
     }
 }

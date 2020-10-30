@@ -29,6 +29,11 @@
          </li>  --}}
            <li class="nav-item ">
              <a class="nav-link " href="{{ URL::to('books') }}">Książki</a>
+           </li>
+            <li>
+              <a class="nav-link dropdown-toggle"  href="{{ URL::to('loans') }}">Wypożyczenia</a>
+            </li>
+
              {{-- <div class="dropdown-menu">
                <a class="dropdown-item" href="{{ URL::to('books/cheapest') }}">Top 3 najtańszych</a>
                <a class="dropdown-item" href="{{ URL::to('books/longest') }}">Top 3 najdłuższych</a>
