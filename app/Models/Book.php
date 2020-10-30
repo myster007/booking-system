@@ -10,4 +10,9 @@ class Book extends Model
      protected $fillable = [
          'name' , ' year' , 'publication_place', 'pages', 'price',
      ];
+
+public function isbn()
+     {
+         return $this -> hasOnea('App\Models\Isbn');
+     }
 }
