@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers; 
 use App\Models\Book;
 
 use Illuminate\Http\Request;
@@ -23,9 +23,17 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+            $book = new Book();
+        $book->name = "Ala z lala";
+        $book->year = 2000;
+        $book->publication_place = "Warszawa";
+        $book->pages = 200;
+        $book->price = 39.99;
+        $book->save();
+        
+        return redirect('books');
     }
 
     /**
@@ -47,7 +55,8 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        //
+        $book = Book::find($id);
+        return view('books/show',['book' => $book]);
     }
 
     /**
@@ -58,7 +67,16 @@ class BookController extends Controller
      */
     public function edit($id)
     {
-        //
+        $book = Book::find($id);
+         $book->name = "Męczennik";
+         $book->year = 1986;
+         $book->publication_place = 'Łódź';
+         $book->pages = 450;
+         $book->price = 59.99;
+         $book->save();
+        
+         return redirect('books');
+    
     }
 
     /**
@@ -81,6 +99,9 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $book = Book::find($id);
+        $book -> delete();
+        return redirect('books');
+
     }
 }
