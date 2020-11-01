@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers; 
+use DB;
 use App\Models\Book;
 use App\Models\Isbn;
-
-
+use App\Repositories\BookRepository;
 use Illuminate\Http\Request;
+
 
 class BookController extends Controller
 {
@@ -14,26 +15,24 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function index(Book $book)
     {
-        $booksList = $book->all();
+        $booksList = $bookRepo->getAll();
         return view('books/list' , ['booksList' => $booksList]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
+    public function create(BookRepository $bookRepo)
     {
-        $book = new Book();
-        $book->name = "Panna";
-        $book->year = 2000;
-        $book->publication_place = "Warszawa";
-        $book->pages = 200;
-        $book->price = 39.99;
-        $book->save();
+        $data = [
+        "name" => "Panna",
+        "year" => 2000,
+        "publication_place" => "Warszawa",
+        "pages" => 200,
+        "price" => 39.99,
+        ];
+        
+        $booksList = $bookRepo -> create($data);
         
         $isbn = new Isbn(['number' => '141412532', 'issued_by' => "Helion" , 'issued_on' => "2013-03-02"]);
         $book -> isbn() -> save($isbn);
@@ -51,81 +50,57 @@ class BookController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function show(BookRepository $bookRepo, $id)
     {
-        $book = Book::find($id);
+        $book = $bookRepo -> find($id);
         return view('books/show',['book' => $book]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function edit(BookRepository $bookRepo, $id)
     {
-        $book = Book::find($id);
-         $book->name = "Męczennik";
-         $book->year = 1986;
-         $book->publication_place = 'Łódź';
-         $book->pages = 450;
-         $book->price = 59.99;
-         $book->save();
+        $data = [
+            "name" => "Teletubis",
+            "year" => 2002,
+            "publication_place" => "Warsaw",
+            "pages" => 453,
+            "price" => 39.99,
+        ];
+        $booksList = $bookRepo -> update($data, $id);
         
          return redirect('books');
     
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(BookRepository $bookRepo, $id)
     {
-        $book = Book::find($id);
-        $book -> delete();
+        $booksList = $bookRepo->delete($id);
         return redirect('books');
-
     }
-    public function cheapest(Book $book)
+
+    public function cheapest(BookRepository $bookRepo)
     {
-        $booksList = DB::table('books')->orderBy('price', 'asc')-> limit(3)->get();
+        $booksList = $bookRepo->cheapest();
         return view('books/list',['booksList' => $booksList]);
     }
 
-    public function longest(Book $book)
+    public function longest(BookRepository $bookRepo)
     {
-        $booksList = DB::table('books')->orderBy('pages', 'desc')-> limit(3)->get();
+        $booksList = $bookRepo->longest();
         return view('books/list',['booksList' => $booksList]);
     }
 
-    public function search(Request $request, Book $book)
+    public function search(Request $request, BookRepository $bookRepo)
     {
         $q = $request->input('q',"");
-        $booksList = DB::table('books')->where('name', 'like', "%" . $q . "%")->get();
+        $booksList = $bookRepo->search($q);
         return view('books/list',['booksList' => $booksList]);
     }
+
 
     
 }
