@@ -25,4 +25,13 @@ class BookRepository extends BaseRepository{
         return $booksList;
     }
   
+    public function create(array $data) {
+        $book = Book::create($data);
+  
+        if(isset($data['author_id'])) {
+          $book->authors()->sync($data['author_id']);
+        }
+        return $book;
+    }
+  
 }

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Author;
+use App\Models\Book;
 
 use Illuminate\Http\Request;
 
@@ -13,9 +15,11 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        $authorsList = Author::all();
-        return view('authors/list', ['authorsList' => $authorsList]);
+      $authorsList = Author::all();
+      return view('authors/list',['authorsList' => $authorsList]);
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -24,24 +28,7 @@ class AuthorController extends Controller
      */
     public function create()
     {
-        $author = new Author();
-        $author->lastname = "Woźniak";
-        $author->firstname = "Mateusz";
-        $author->birthday = "1996-12-20";
-        $author->genres = "horror, s-f";
-        $author->save();
-
-        $authorSecond = new Author();
-        $authorSecond->lastname = "King";
-        $authorSecond->firstname = "Rock";
-        $authorSecond->birthday = "1992-03-12";
-        $authorSecond->genres = "horror, s-f";
-        $authorSecond->save();
-
-        $panna = Book::where('name', "Panna") -> first();
-        $panna -> authors()->attach($author);
-        $panna -> authors()->attach($authorSecond);
-        return redirect('books');
+       return view('authors/create');
     }
 
     /**
@@ -52,7 +39,12 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request ->all();
+        $author = new Author();
+        $author -> fill ($data);
+        $author -> save();
+
+        return redirect ('authors');
     }
 
     /**
