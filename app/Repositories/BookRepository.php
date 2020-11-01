@@ -33,5 +33,16 @@ class BookRepository extends BaseRepository{
         }
         return $book;
     }
+
+    public function update(array $data, $id) {
+        $book = Book::find($id);
+        $book ->fill($data);
+        $book -> save();
+  
+        if(isset($data['author_id'])) {
+          $book->authors()->sync($data['author_id']);
+        }
+        return $book;
+    }
   
 }

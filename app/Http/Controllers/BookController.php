@@ -53,22 +53,18 @@ class BookController extends Controller
 
     public function edit(BookRepository $bookRepo, $id)
     {
-        $data = [
-            "name" => "Teletubis",
-            "year" => 2002,
-            "publication_place" => "Warsaw",
-            "pages" => 453,
-            "price" => 39.99,
-        ];
-        $booksList = $bookRepo -> update($data, $id);
-        
-         return redirect('books');
+        $book = $bookRepo -> find($id);
+        $authors = Author::all();
+        return view('books/edit' , ['book' => $book, 'authors' => $authors]);
     
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, BookRepository $bookRepo, $id)
     {
-        //
+        $data = $request -> all();
+        $booksList = $bookRepo -> update($data, $id);
+
+        return redirect('books');
     }
 
     public function destroy(BookRepository $bookRepo, $id)
