@@ -43,8 +43,24 @@
             <td>Data wydania numeru ISBN</td>
             <td> {{$book->isbn->issued_on}} </td>
           </tr>
+          @endisset
+          
 
-        @endisset
+          @isset($ook->authors)
+          <tr>
+              <td>Autorzy</td>
+              <td>
+                  <ul>
+                    @foreach ($book -> authors as $author)
+                      <li>
+                        {{$author->lastname}} {{$author->firstname}}
+                      </li>
+                    @endforeach
+                  </ul>
+              </td>
+            </tr>
+          @endisset
+        
 
       </tr>
     </table>

@@ -27,8 +27,8 @@ class BookController extends Controller
      */
     public function create(Request $request)
     {
-            $book = new Book();
-        $book->name = "Ala z lala";
+        $book = new Book();
+        $book->name = "Panna";
         $book->year = 2000;
         $book->publication_place = "Warszawa";
         $book->pages = 200;
@@ -108,4 +108,24 @@ class BookController extends Controller
         return redirect('books');
 
     }
+    public function cheapest(Book $book)
+    {
+        $booksList = DB::table('books')->orderBy('price', 'asc')-> limit(3)->get();
+        return view('books/list',['booksList' => $booksList]);
+    }
+
+    public function longest(Book $book)
+    {
+        $booksList = DB::table('books')->orderBy('pages', 'desc')-> limit(3)->get();
+        return view('books/list',['booksList' => $booksList]);
+    }
+
+    public function search(Request $request, Book $book)
+    {
+        $q = $request->input('q',"");
+        $booksList = DB::table('books')->where('name', 'like', "%" . $q . "%")->get();
+        return view('books/list',['booksList' => $booksList]);
+    }
+
+    
 }
