@@ -7,7 +7,7 @@ use App\Models\Book;
 use App\Models\Isbn;
 use App\Models\Author;
 use App\Repositories\BookRepository;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreBook;
 
 
 class BookController extends Controller
@@ -36,7 +36,7 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, BookRepository $bookRepo)
+    public function store(StoreBook $request, BookRepository $bookRepo)
     {
         
         $data = $request->all();
