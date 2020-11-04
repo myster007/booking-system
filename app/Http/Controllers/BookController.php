@@ -8,6 +8,7 @@ use App\Models\Isbn;
 use App\Models\Author;
 use App\Repositories\BookRepository;
 use App\Http\Requests\StoreBook;
+use App\Services\OpenLibrary;
 
 
 class BookController extends Controller
@@ -45,10 +46,13 @@ class BookController extends Controller
         return redirect('books');
     }
 
-    public function show(BookRepository $bookRepo, $id)
+    public function show(OpenLibrary $ol, BookRepository $bookRepo, $id)
     {
         $book = $bookRepo -> find($id);
-        return view('books/show',['book' => $book]);
+        $openLibraryData = $ol-> search ($book -> name);
+
+        return view('books/show',['book' => $book,
+                                 'ol' => json_decode($openLibraryData )]);
     }
 
     public function edit(BookRepository $bookRepo, $id)
